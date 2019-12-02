@@ -3,7 +3,10 @@ const project = require('../project')
 
 const scrapeProduct = async (product) => {
   const { images, paths } = project
-  const browser = await puppeteer.launch()
+  const browser = await puppeteer.launch({
+    headless: true,
+    executablePath: './node_modules/puppeteer/.local-chromium/win64-674921/chrome-win/chrome.exe',
+  })
   const page = await browser.newPage()
 
   // Block resources to increase performance
