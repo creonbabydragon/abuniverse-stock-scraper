@@ -13,6 +13,7 @@ const scrapeProduct = async (product) => {
   await page.setRequestInterception(true)
   page.on('request', (request) => {
     const blockedTypes = ['image', 'stylesheet', 'font', 'script']
+
     if (blockedTypes.includes(request.resourceType())) {
       request.abort()
     } else {
@@ -25,10 +26,10 @@ const scrapeProduct = async (product) => {
   console.log(`(${productPage})\n`)
   await page.goto(productPage)
 
-  const scrapedData = await page.evaluate((product, images) => {
+  const scrapedData = await page.evaluate((productData, stockImages) => {
     const getIndicator = (image) => {
       if (!image || typeof image !== 'string') return null
-      const matchedIndicator = images.find((item) => image.includes(item.image))
+      const matchedIndicator = stockImages.find((item) => image.includes(item.image))
       return (matchedIndicator) ? matchedIndicator.label : null
     }
 
@@ -39,7 +40,7 @@ const scrapeProduct = async (product) => {
     const xLarge = displayMarkers.querySelector('img[alt*="XLarge"]')
 
     const data = {
-      ...product,
+      ...productData,
       stock: {
         small: small && getIndicator(small.src),
         medium: medium && getIndicator(medium.src),
