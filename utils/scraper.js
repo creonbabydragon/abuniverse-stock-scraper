@@ -2,6 +2,8 @@ const puppeteer = require('puppeteer')
 const project = require('../project')
 
 const scrapeProduct = async (product) => {
+  console.log(`Queuing ${product.name}`)
+
   const { images, paths } = project
   const browser = await puppeteer.launch({
     headless: true,
@@ -23,7 +25,7 @@ const scrapeProduct = async (product) => {
 
   // Go to product page
   const productPage = paths.product.replace(/:id/, product.id)
-  console.log(`(${productPage})\n`)
+  console.log(`\nScraping ${product.name}\n(${productPage})`)
   await page.goto(productPage)
 
   const scrapedData = await page.evaluate((productData, stockImages) => {

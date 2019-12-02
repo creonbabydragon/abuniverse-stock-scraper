@@ -25,17 +25,19 @@ app.get('/', async () => {
   //   stock.push(await scraper.scrapeProduct(product))
   // }
 
+  // Scrape all Pages
   const scrapeTargets = products.map(scraper.scrapeProduct)
-  console.log(scrapeTargets)
+  const stock = await Promise.all(scrapeTargets)
+  console.log(stock)
 
-  // const publicPath = paths.public.split(':file')[0]
-  // const fileName   = paths.public.replace(/:file/, 'stock.json')
+  const publicPath = paths.public.split(':file')[0]
+  const fileName   = paths.public.replace(/:file/, 'stock.json')
 
-  // // Write results to JSON File
-  // console.log(`Writing to ${fileName}`)
-  // if (!fs.existsSync(publicPath)) fs.mkdirSync(publicPath)
+  // Write results to JSON File
+  console.log(`Writing to ${fileName}`)
+  if (!fs.existsSync(publicPath)) fs.mkdirSync(publicPath)
 
-  // fs.writeFileSync(fileName, JSON.stringify(stock, null, 2))
+  fs.writeFileSync(fileName, JSON.stringify(stock, null, 2))
 })
 
 console.log(`Server running at http://localhost:${port}`)
