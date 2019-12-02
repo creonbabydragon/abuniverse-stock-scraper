@@ -34,9 +34,9 @@ const scrapeProduct = async (product) => {
     }
 
     const displayMarkers = document.querySelector('.abu_product_stock_display_markers')
-    const small = displayMarkers.querySelector('img[alt*="Small"]')
+    const small  = displayMarkers.querySelector('img[alt*="Small"]')
     const medium = displayMarkers.querySelector('img[alt*="Medium"]')
-    const large = displayMarkers.querySelector('img[alt*=" Large"]')
+    const large  = displayMarkers.querySelector('img[alt*=" Large"]')
     const xLarge = displayMarkers.querySelector('img[alt*="XLarge"]')
 
     const data = {
