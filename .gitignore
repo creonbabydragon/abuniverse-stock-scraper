@@ -1,0 +1,6 @@
+# Generated Files
+/public/stock.json
+
+# NPM
+/node_modules
+/package-lock.json
