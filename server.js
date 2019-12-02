@@ -14,29 +14,17 @@ const app = express()
 app.use(express.static(path.join(`${__dirname}public`)))
 
 app.get('/', async () => {
-  // const stock = []
-
-  // iterate over each project and scrape
-  // TODO: explore solutions with Promise.all() to run these asynchronously
-  // for (let index = 0; index < products.length; index += 1) {
-  //   const product = products[index]
-
-  //   console.log(`Scraping ${product.name}`)
-  //   stock.push(await scraper.scrapeProduct(product))
-  // }
-
   // Scrape all Pages
   const scrapeTargets = products.map(scraper.scrapeProduct)
   const stock = await Promise.all(scrapeTargets)
   console.log(stock)
 
+  // Write results to JSON File
   const publicPath = paths.public.split(':file')[0]
   const fileName   = paths.public.replace(/:file/, 'stock.json')
 
-  // Write results to JSON File
   console.log(`Writing to ${fileName}`)
   if (!fs.existsSync(publicPath)) fs.mkdirSync(publicPath)
-
   fs.writeFileSync(fileName, JSON.stringify(stock, null, 2))
 })
 
