@@ -34,8 +34,9 @@ app.get('/', async (request, response) => {
   if (!fs.existsSync(publicPath)) fs.mkdirSync(publicPath)
   fs.writeFileSync(fileName, JSON.stringify(stock, null, 2))
 
-  // response.send(stock)
+  response.send(stock)
 })
 
 console.log(`Server running at http://localhost:${port}`)
 app.listen(port)
+app.set('json spaces', 2)
