@@ -14,17 +14,20 @@ const app = express()
 app.use(express.static(path.join(`${__dirname}public`)))
 
 app.get('/', async (request, response) => {
+  const timeStart = Date.now()
   let stock
 
   // Scrape all Pages
   const scrapeTargets = products.map(scraper.scrapeProduct)
   try {
     stock = await Promise.all(scrapeTargets)
-    console.log(stock)
   } catch (error) {
     console.log(error)
     return
   }
+
+  const elapsedTime = Date.now() - timeStart
+  console.log(`Scraped ${products.length} products in ${elapsedTime / 1000}s`)
 
   // Write results to JSON File
   const publicPath = paths.public.split(':file')[0]
