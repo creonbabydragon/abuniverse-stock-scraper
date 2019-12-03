@@ -13,11 +13,18 @@ EventEmitter.defaultMaxListeners = Infinity
 const app = express()
 app.use(express.static(path.join(`${__dirname}public`)))
 
-app.get('/', async () => {
+app.get('/', async (request, response) => {
+  let stock
+
   // Scrape all Pages
   const scrapeTargets = products.map(scraper.scrapeProduct)
-  const stock = await Promise.all(scrapeTargets)
-  console.log(stock)
+  try {
+    stock = await Promise.all(scrapeTargets)
+    console.log(stock)
+  } catch (error) {
+    console.log(error)
+    return
+  }
 
   // Write results to JSON File
   const publicPath = paths.public.split(':file')[0]
@@ -26,6 +33,8 @@ app.get('/', async () => {
   console.log(`Writing to ${fileName}`)
   if (!fs.existsSync(publicPath)) fs.mkdirSync(publicPath)
   fs.writeFileSync(fileName, JSON.stringify(stock, null, 2))
+
+  // response.send(stock)
 })
 
 console.log(`Server running at http://localhost:${port}`)
