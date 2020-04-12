@@ -1,6 +1,7 @@
 const express = require('express')
 const fs      = require('fs')
 const path    = require('path')
+const puppeteer = require('puppeteer')
 const { EventEmitter } = require('events')
 
 const scraper = require('./utils/scraper')
@@ -17,14 +18,22 @@ app.get('/', async (request, response) => {
   const timeStart = Date.now()
   let stock
 
+  // Create a browser
+  const browser = await puppeteer.launch({
+    headless: true,
+  })
+
   // Scrape all Pages
-  const scrapeTargets = products.map(scraper.scrapeProduct)
+  const scrapeTargets = products.map(product => scraper.scrapeProduct(browser, product))
   try {
     stock = await Promise.all(scrapeTargets)
   } catch (error) {
     console.log(error)
     return
   }
+
+
+  await browser.close()
 
   const elapsedTime = Date.now() - timeStart
   console.log(`Scraped ${products.length} products in ${elapsedTime / 1000}s`)

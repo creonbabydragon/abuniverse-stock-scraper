@@ -1,14 +1,9 @@
-const puppeteer = require('puppeteer')
 const project = require('../project')
 
-const scrapeProduct = async (product) => {
+const scrapeProduct = async (browser, product) => {
   console.log(`Queuing ${product.name}`)
 
   const { images, paths } = project
-  const browser = await puppeteer.launch({
-    headless: true,
-    executablePath: './node_modules/puppeteer/.local-chromium/win64-674921/chrome-win/chrome.exe',
-  })
   const page = await browser.newPage()
 
   // Block resources to increase performance
@@ -54,7 +49,6 @@ const scrapeProduct = async (product) => {
     return data
   }, product, images)
 
-  await browser.close()
   return scrapedData
 }
 
